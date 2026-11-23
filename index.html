@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DIY Academy Technology Limited — Smarter tools for better STEM learning</title>
+<meta name="description" content="DIY Academy Technology Limited is a Hong Kong education technology company focused on STEM learning analytics, learning platforms, and AI-assisted tools.">
+<meta name="theme-color" content="#12233F">
+
+<script>
+  /* Runs early: marks JS as available and applies the remembered language to <html lang>. */
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    try {
+      var q = new URLSearchParams(location.search).get('lang');
+      var s = q || localStorage.getItem('diyat-lang');
+      if (!s && navigator.language && navigator.language.toLowerCase().indexOf('zh') === 0) s = 'zh';
+      if (s === 'zh') d.lang = 'zh-Hant';
+    } catch (e) {}
+  })();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --navy: #12233F;
+    --blue: #356AF6;
+    --blue-ink: #2550D4;      /* darker blue for text on light backgrounds (contrast) */
+    --teal: #55C6B5;
+    --teal-ink: #1B7F70;
+    --bg: #F7F8FC;
+    --ink: #202A3A;
+    --muted: #525E73;
+    --white: #FFFFFF;
+    --line: #E1E6F0;
+    --tint: #EDF2FE;
+    --teal-tint: #E4F6F3;
+    --error: #B42318;
+    --radius: 20px;
+    --font-body: "Inter", "Noto Sans TC", system-ui, -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    --font-head: "Manrope", "Noto Sans TC", system-ui, -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    --header-h: 76px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-padding-top: calc(var(--header-h) + 16px); -webkit-text-size-adjust: 100%; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-head);
+    color: var(--navy);
+    margin: 0;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  h1 { font-size: clamp(2.4rem, 4.4vw + 1rem, 3.85rem); font-weight: 800; }
+  h2 { font-size: clamp(1.8rem, 2.4vw + 1rem, 2.7rem); font-weight: 800; }
+  h3 { font-size: 1.3rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+  p { margin: 0; text-wrap: pretty; }
+  a { color: var(--blue-ink); }
+  img, svg { max-width: 100%; }
+  ul, ol { margin: 0; padding: 0; }
+
+  /* Traditional Chinese typography adjustments */
+  html[lang="zh-Hant"] body { line-height: 1.85; }
+  html[lang="zh-Hant"] h1,
+  html[lang="zh-Hant"] h2,
+  html[lang="zh-Hant"] h3,
+  html[lang="zh-Hant"] .statement-text { letter-spacing: 0.01em; line-height: 1.4; }
+  html[lang="zh-Hant"] h1 { font-size: clamp(2.1rem, 3.6vw + 0.9rem, 3.3rem); }
+
+  :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; border-radius: 6px; }
+  .on-dark :focus-visible { outline-color: #fff; }
+
+  .container { width: 100%; max-width: 1220px; margin-inline: auto; padding-inline: clamp(20px, 5vw, 40px); }
+  .section { padding-block: clamp(64px, 9vw, 116px); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  .skip-link {
+    position: absolute; left: 16px; top: -100px; z-index: 100;
+    background: var(--navy); color: #fff; padding: 12px 18px; border-radius: 10px; font-weight: 600;
+  }
+  .skip-link:focus { top: 12px; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 52px; padding: 12px 26px;
+    border: 2px solid transparent; border-radius: 14px;
+    font: inherit; font-weight: 600; line-height: 1.25; text-align: center; text-decoration: none;
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--blue); color: #fff; box-shadow: 0 10px 24px -12px rgba(53,106,246,.7); }
+  .btn-primary:hover { background: var(--blue-ink); }
+  .btn-secondary { background: #fff; color: var(--navy); border-color: #C5CEDF; }
+  .btn-secondary:hover { border-color: var(--navy); }
+  .btn-light { background: #fff; color: var(--navy); }
+  .btn-light:hover { background: var(--tint); }
+  .btn-outline-light { background: transparent; color: #fff; border-color: #fff; }
+  .btn-outline-light:hover { background: rgba(255,255,255,.14); }
+  .btn-sm { min-height: 46px; padding: 8px 20px; font-size: .9375rem; border-radius: 12px; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 14px; }
+
+  /* Small decorative "connected dots" motif used above headings */
+  .motif { display: block; width: 72px; height: 14px; margin-bottom: 22px; }
+
+  /* ---------- Header ---------- */
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(247,248,252,.9);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px); backdrop-filter: saturate(1.4) blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .site-header.is-scrolled { border-color: var(--line); box-shadow: 0 8px 24px -20px rgba(18,35,63,.45); }
+  .header-inner { display: flex; align-items: center; gap: 20px; min-height: var(--header-h); }
+  .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-head); font-weight: 800; font-size: 1.02rem; letter-spacing: -0.01em;
+    color: var(--navy); text-decoration: none; white-space: nowrap;
+  }
+  .brand span span { font-weight: 600; color: var(--muted); }
+  .brand svg { flex: none; }
+  .site-menu { display: flex; align-items: center; flex: 1; gap: 20px; }
+  .site-nav { margin-inline: auto; }
+  .site-nav ul { display: flex; gap: 2px; list-style: none; }
+  .site-nav a {
+    display: block; padding: 10px 13px; border-radius: 10px;
+    color: var(--ink); font-weight: 500; font-size: .98rem; text-decoration: none; white-space: nowrap;
+  }
+  .site-nav a:hover { background: #E9EDF6; color: var(--navy); }
+  .header-actions { display: flex; align-items: center; gap: 14px; }
+
+  .lang-switch {
+    display: inline-flex; align-items: center; gap: 2px; padding: 3px;
+    background: #fff; border: 1px solid var(--line); border-radius: 999px;
+  }
+  .lang-switch button {
+    min-width: 46px; min-height: 38px; padding: 0 12px;
+    border: 0; border-radius: 999px; background: transparent;
+    font: inherit; font-size: .875rem; font-weight: 500; color: var(--muted); cursor: pointer;
+  }
+  .lang-switch button:hover { color: var(--navy); }
+  /* Selected language: filled pill + bold + underline (not colour alone) */
+  .lang-switch button[aria-pressed="true"] {
+    background: var(--navy); color: #fff; font-weight: 700;
+    text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px;
+  }
+  .lang-sep { color: #9AA5B8; font-size: .875rem; }
+
+  .menu-toggle {
+    display: none; align-items: center; gap: 10px; margin-left: auto;
+    min-height: 46px; padding: 0 14px;
+    background: #fff; border: 1px solid #C5CEDF; border-radius: 12px;
+    font: inherit; font-weight: 600; font-size: .9375rem; color: var(--navy); cursor: pointer;
+  }
+  .menu-toggle .bars { position: relative; width: 18px; height: 12px; }
+  .menu-toggle .bars::before, .menu-toggle .bars::after {
+    content: ""; position: absolute; left: 0; right: 0; height: 2px; border-radius: 2px; background: currentColor;
+    transition: transform .2s ease, top .2s ease;
+  }
+  .menu-toggle .bars::before { top: 0; }
+  .menu-toggle .bars::after { top: 10px; }
+  .menu-toggle[aria-expanded="true"] .bars::before { top: 5px; transform: rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] .bars::after { top: 5px; transform: rotate(-45deg); }
+
+  @media (max-width: 1120px) {
+    .menu-toggle { display: inline-flex; }
+    .site-menu {
+      display: none; position: absolute; left: 0; right: 0; top: 100%;
+      flex-direction: column; align-items: stretch; gap: 16px;
+      padding: 12px clamp(20px, 5vw, 40px) 24px;
+      background: #fff; border-bottom: 1px solid var(--line);
+      box-shadow: 0 24px 40px -24px rgba(18,35,63,.35);
+      max-height: calc(100vh - var(--header-h)); overflow-y: auto;
+    }
+    .site-menu.is-open { display: flex; }
+    .site-nav { margin: 0; }
+    .site-nav ul { flex-direction: column; }
+    .site-nav a { padding: 14px 12px; font-size: 1.0625rem; border-bottom: 1px solid var(--line); border-radius: 0; }
+    .header-actions { flex-direction: column; align-items: stretch; gap: 16px; }
+    .lang-switch { align-self: flex-start; }
+    .lang-switch button { min-height: 44px; min-width: 56px; }
+  }
+  @media (max-width: 420px) { .brand { font-size: .92rem; } }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; overflow: hidden;
+    padding-block: clamp(48px, 7vw, 96px) clamp(64px, 8vw, 112px);
+    background:
+      radial-gradient(900px 520px at 88% -5%, rgba(53,106,246,.12), transparent 62%),
+      radial-gradient(640px 420px at -5% 105%, rgba(85,198,181,.16), transparent 60%),
+      var(--bg);
+  }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px;
+    font-size: .8125rem; font-weight: 700; letter-spacing: .14em; color: var(--blue-ink);
+  }
+  .eyebrow::before { content: ""; width: 28px; height: 2px; background: var(--teal); border-radius: 2px; }
+  .hero-text { margin-top: 24px; max-width: 34em; font-size: 1.1875rem; color: var(--muted); }
+  .hero .btn-row { margin-top: 36px; }
+  .hero-art { margin: 0; }
+  .hero-art svg { display: block; width: 100%; height: auto; }
+  .hero-art text { font-family: var(--font-body); }
+  .hero-art figcaption {
+    display: flex; gap: 8px; align-items: flex-start; margin-top: 12px; padding-inline: 8%;
+    font-size: .8125rem; line-height: 1.5; color: var(--muted);
+  }
+  .hero-art figcaption svg { flex: none; width: 16px; height: 16px; margin-top: 2px; }
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-art { max-width: 560px; }
+    .hero-art figcaption { padding-inline: 0; }
+  }
+
+  /* ---------- Statement ---------- */
+  .statement { background: var(--tint); }
+  .statement-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 80px); align-items: end; }
+  .statement-text {
+    font-family: var(--font-head); font-weight: 700; color: var(--navy);
+    font-size: clamp(1.7rem, 2.6vw + .9rem, 2.75rem); line-height: 1.2; letter-spacing: -0.02em; text-wrap: balance;
+  }
+  .statement-sub { font-size: 1.125rem; color: #3B475C; padding-left: 20px; border-left: 3px solid var(--teal); }
+  @media (max-width: 820px) { .statement-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- Section heads ---------- */
+  .section-head { max-width: 44rem; margin-bottom: clamp(36px, 5vw, 56px); }
+  .section-head p { margin-top: 16px; font-size: 1.125rem; color: var(--muted); }
+
+  /* ---------- Solutions ---------- */
+  .solutions { background: #fff; }
+  .card-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; list-style: none; scroll-margin-top: calc(var(--header-h) + 24px); }
+  .card {
+    display: flex; flex-direction: column; gap: 14px; height: 100%;
+    padding: 32px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background-color .25s ease;
+  }
+  .card:hover { transform: translateY(-4px); background: #fff; border-color: #C3D2FB; box-shadow: 0 24px 48px -28px rgba(18,35,63,.35); }
+  .card p { color: var(--muted); }
+  .icon-tile { display: grid; place-items: center; width: 54px; height: 54px; margin-bottom: 8px; border-radius: 14px; background: var(--tint); color: var(--blue-ink); }
+  .card-grid li:nth-child(2) .icon-tile { background: var(--teal-tint); color: var(--teal-ink); }
+  .card-grid li:nth-child(3) .icon-tile { background: #E6EAF2; color: var(--navy); }
+  .card-link {
+    display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+    margin-top: auto; min-height: 44px; padding-top: 6px;
+    font-weight: 600; color: var(--blue-ink); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 5px;
+    transition: text-decoration-color .2s ease;
+  }
+  .card-link:hover { text-decoration-color: currentColor; }
+  .card-link svg { transition: transform .2s ease; flex: none; }
+  .card-link:hover svg { transform: translateX(4px); }
+  @media (max-width: 900px) { .card-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- How we work ---------- */
+  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; list-style: none; }
+  .step { position: relative; padding-top: 76px; }
+  .step-num {
+    position: absolute; top: 0; left: 0;
+    display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+    background: var(--navy); color: #fff; font-family: var(--font-head); font-weight: 800; font-size: 1.125rem;
+    box-shadow: 0 0 0 6px rgba(85,198,181,.28);
+  }
+  .step:not(:last-child)::before {
+    content: ""; position: absolute; top: 25px; left: 72px; right: -26px;
+    border-top: 2px dashed #B4C0D8;
+  }
+  .step h3 { margin-bottom: 10px; }
+  .step p { color: var(--muted); max-width: 26em; }
+  @media (max-width: 820px) {
+    .steps { grid-template-columns: 1fr; gap: 36px; }
+    .step { padding-top: 0; padding-left: 76px; min-height: 52px; }
+    .step h3 { padding-top: 10px; }
+    .step:not(:last-child)::before { top: 66px; bottom: -28px; left: 25px; right: auto; border-top: 0; border-left: 2px dashed #B4C0D8; }
+  }
+
+  /* ---------- Who we support ---------- */
+  .audiences {
+    background-color: var(--navy);
+    background-image: radial-gradient(rgba(255,255,255,.07) 1.2px, transparent 1.6px);
+    background-size: 26px 26px;
+    color: #fff;
+  }
+  .audiences h2 { color: #fff; }
+  .audience-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; list-style: none; }
+  .audience {
+    display: flex; align-items: center; gap: 18px; height: 100%; padding: 26px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16); border-radius: var(--radius);
+    font-family: var(--font-head); font-weight: 700; font-size: 1.125rem; line-height: 1.4;
+  }
+  .audience .icon-tile { flex: none; margin: 0; background: rgba(85,198,181,.16); color: var(--teal); }
+  @media (max-width: 900px) { .audience-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- About ---------- */
+  .about { background: #fff; }
+  .about-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
+  .about-copy p { margin-top: 22px; font-size: 1.125rem; color: var(--muted); }
+  .about-copy .btn { margin-top: 32px; }
+  .about-art svg { display: block; width: 100%; height: auto; }
+  @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; } .about-art { max-width: 560px; } }
+
+  /* ---------- Trust / proof ---------- */
+  .proof-panel {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(20px, 3vw, 36px); align-items: center;
+    padding: clamp(28px, 4vw, 48px);
+    background: #fff; border: 1px solid var(--line); border-left: 6px solid var(--teal); border-radius: var(--radius);
+  }
+  .proof-panel .icon-tile { width: 64px; height: 64px; margin: 0; border-radius: 18px; background: var(--teal-tint); color: var(--teal-ink); }
+  .proof-panel h2 { font-size: clamp(1.4rem, 1.6vw + 1rem, 2rem); line-height: 1.25; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; list-style: none; }
+  .chips li { padding: 6px 14px; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; font-size: .9rem; font-weight: 500; color: #3B475C; }
+  @media (max-width: 640px) { .proof-panel { grid-template-columns: 1fr; } }
+
+  /* ---------- CTA band ---------- */
+  .cta { position: relative; overflow: hidden; background: var(--blue); color: #fff; }
+  .cta-bg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .cta-inner { position: relative; max-width: 46rem; }
+  .cta h2 { color: #fff; }
+  .cta p { margin-top: 18px; font-size: 1.1875rem; color: #fff; }
+  .cta .btn-row { margin-top: 34px; }
+
+  /* ---------- Contact ---------- */
+  .contact-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(32px, 6vw, 80px); align-items: start; }
+  .contact-info > p { margin-top: 18px; font-size: 1.125rem; color: var(--muted); }
+  .contact-list { display: grid; gap: 22px; margin-top: 36px; list-style: none; }
+  .contact-list li { display: flex; gap: 16px; align-items: flex-start; }
+  .contact-list .icon-tile { flex: none; width: 46px; height: 46px; margin: 0; border-radius: 12px; }
+  .contact-list .label { display: block; font-size: .8125rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .contact-list a { font-weight: 600; overflow-wrap: anywhere; }
+  .form-card { padding: clamp(24px, 4vw, 40px); background: #fff; border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 30px 60px -44px rgba(18,35,63,.45); }
+  .form-note { margin-bottom: 22px; font-size: .9rem; color: var(--muted); }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .field { display: flex; flex-direction: column; gap: 7px; }
+  .field.full { grid-column: 1 / -1; }
+  .field label { font-weight: 600; font-size: .95rem; color: var(--navy); }
+  .field .opt { font-weight: 400; color: var(--muted); }
+  .req { color: var(--error); }
+  .field input[type="text"], .field input[type="email"], .field select, .field textarea {
+    width: 100%; min-height: 50px; padding: 12px 14px;
+    font: inherit; font-size: 1rem; color: var(--ink);
+    background: #fff; border: 1.5px solid #B9C3D6; border-radius: 12px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .field textarea { min-height: 136px; resize: vertical; line-height: 1.55; }
+  .field input:hover, .field select:hover, .field textarea:hover { border-color: #7C8AA5; }
+  .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+    outline: none; border-color: var(--blue); box-shadow: 0 0 0 4px rgba(53,106,246,.22);
+  }
+  .field [aria-invalid="true"] { border-color: var(--error); border-width: 2px; }
+  .field-error { display: flex; gap: 6px; align-items: flex-start; font-size: .875rem; font-weight: 600; line-height: 1.45; color: var(--error); }
+  .field-error[hidden] { display: none; }
+  .field-error svg { flex: none; width: 16px; height: 16px; margin-top: 2px; }
+  .privacy-note { font-size: .9rem; color: var(--muted); padding: 14px 16px; background: var(--bg); border-radius: 12px; scroll-margin-top: calc(var(--header-h) + 24px); }
+  .consent { display: flex; gap: 12px; align-items: flex-start; }
+  .consent input { flex: none; width: 22px; height: 22px; margin: 3px 0 0; accent-color: var(--blue); }
+  .consent label { font-weight: 400; font-size: .95rem; color: var(--ink); }
+  .form-actions { margin-top: 4px; }
+  .form-status {
+    display: flex; gap: 14px; align-items: flex-start; margin-bottom: 24px; padding: 18px 20px;
+    border-radius: 14px; border: 1.5px solid var(--teal-ink); background: var(--teal-tint); color: #0F3F38;
+  }
+  .form-status[hidden] { display: none; }
+  .form-status.is-error { border-color: var(--error); background: #FEF3F2; color: #7A1A12; }
+  .form-status svg { flex: none; width: 24px; height: 24px; margin-top: 2px; }
+  .form-status strong { display: block; font-family: var(--font-head); font-size: 1.0625rem; }
+  .form-status p { font-size: .95rem; margin-top: 4px; overflow-wrap: anywhere; }
+  @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } .form-actions .btn { width: 100%; } }
+
+  /* ---------- Footer ---------- */
+  .site-footer { background: var(--navy); color: #D5DCEA; padding-block: clamp(48px, 6vw, 72px) 28px; font-size: .975rem; }
+  .footer-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr) minmax(0, .7fr); gap: clamp(28px, 5vw, 64px); }
+  .footer-brand { display: flex; gap: 14px; align-items: flex-start; }
+  .footer-brand svg { flex: none; }
+  .footer-brand .name-en { font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; color: #fff; line-height: 1.35; }
+  .footer-brand .name-zh { margin-top: 4px; color: #D5DCEA; }
+  .site-footer h2 { margin-bottom: 14px; font-family: var(--font-body); font-size: .8125rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); }
+  .site-footer a { color: #fff; text-underline-offset: 4px; }
+  .site-footer address { font-style: normal; }
+  .site-footer address p + p { margin-top: 8px; }
+  .footer-links { display: grid; gap: 4px; list-style: none; }
+  .footer-links a { display: inline-block; padding: 6px 0; text-decoration: none; }
+  .footer-links a:hover { text-decoration: underline; }
+  .footer-bottom { margin-top: clamp(32px, 5vw, 56px); padding-top: 22px; border-top: 1px solid rgba(255,255,255,.16); font-size: .875rem; color: #B7C1D4; }
+  @media (max-width: 820px) { .footer-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- Scroll reveal (only when JS + motion allowed) ---------- */
+  @media (prefers-reduced-motion: no-preference) {
+    .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+    .js .reveal.is-visible { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+
+<body id="top">
+<a class="skip-link" href="#main" data-i18n="skip">Skip to main content</a>
+
+<!-- ======================= HEADER ======================= -->
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="#top" aria-label="DIY Academy Technology — home" data-i18n-attr="aria-label:brand.home">
+      <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+        <rect width="36" height="36" rx="10" fill="#12233F"/>
+        <path d="M9.5 25.5 L18 17 L26.5 10.5" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="9.5" cy="25.5" r="3.6" fill="#55C6B5"/>
+        <circle cx="18" cy="17" r="3.6" fill="#fff"/>
+        <circle cx="26.5" cy="10.5" r="3.6" fill="#7FA2FF"/>
+      </svg>
+      <span>DIY Academy <span>Technology</span></span>
+    </a>
+
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu">
+      <span class="bars" aria-hidden="true"></span>
+      <span data-i18n="menu.label">Menu</span>
+    </button>
+
+    <div class="site-menu" id="site-menu">
+      <nav class="site-nav" aria-label="Main navigation" data-i18n-attr="aria-label:nav.label">
+        <ul>
+          <li><a href="#solutions" data-i18n="nav.solutions">Solutions</a></li>
+          <!-- TODO: point to the Products page when it exists -->
+          <li><a href="#products" data-i18n="nav.products">Products</a></li>
+          <li><a href="#about" data-i18n="nav.about">About</a></li>
+          <!-- TODO: point to the Insights page when it exists -->
+          <li><a href="#proof" data-i18n="nav.insights">Insights</a></li>
+          <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch" role="group" aria-label="Select website language" data-i18n-attr="aria-label:lang.label">
+          <button type="button" data-lang="en" lang="en" aria-pressed="true" aria-label="English">EN</button>
+          <span class="lang-sep" aria-hidden="true">|</span>
+          <button type="button" data-lang="zh" lang="zh-Hant" aria-pressed="false" aria-label="繁體中文">繁中</button>
+        </div>
+        <a class="btn btn-primary btn-sm" href="#contact" data-i18n="cta.book">Book a Consultation</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ======================= 1. HERO ======================= -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-grid">
+      <div class="reveal">
+        <p class="eyebrow" data-i18n="hero.eyebrow">EDUCATION TECHNOLOGY · STEM LEARNING</p>
+        <h1 id="hero-title" data-i18n="hero.title">Smarter tools for better STEM learning.</h1>
+        <p class="hero-text" data-i18n="hero.text">We develop STEM learning analytics, learning platforms, and AI-assisted tools to help education providers create more informed and engaging learning experiences.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#solutions" data-i18n="hero.explore">Explore Our Solutions</a>
+          <a class="btn btn-secondary" href="#contact" data-i18n="cta.book">Book a Consultation</a>
+        </div>
+      </div>
+
+      <figure class="hero-art reveal">
+        <!-- Replace with a real product screenshot when available -->
+        <svg viewBox="0 0 560 500" role="img"
+             aria-label="Illustration of a learning dashboard with a learning pathway, a simple bar chart and connected topic cards. Sample data for illustration only."
+             data-i18n-attr="aria-label:art.alt">
+          <defs>
+            <pattern id="dotsA" width="22" height="22" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1.3" fill="#fff" fill-opacity=".1"/>
+            </pattern>
+            <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="160%">
+              <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#081428" flood-opacity=".3"/>
+            </filter>
+          </defs>
+
+          <!-- Navy panel -->
+          <rect x="40" y="30" width="500" height="440" rx="32" fill="#12233F"/>
+          <rect x="40" y="30" width="500" height="440" rx="32" fill="url(#dotsA)"/>
+
+          <!-- Abstract data constellation -->
+          <g fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5">
+            <path d="M452 84 L498 118 L470 172 L512 214 L456 252"/>
+            <path d="M498 118 L512 214"/>
+          </g>
+          <circle cx="452" cy="84" r="5" fill="#55C6B5"/>
+          <circle cx="498" cy="118" r="7" fill="#356AF6"/>
+          <circle cx="470" cy="172" r="5" fill="#fff"/>
+          <circle cx="512" cy="214" r="6" fill="#55C6B5"/>
+          <circle cx="456" cy="252" r="4" fill="#fff" fill-opacity=".7"/>
+
+          <!-- Connectors between cards -->
+          <g fill="none" stroke="#55C6B5" stroke-width="2" stroke-dasharray="3 7" stroke-linecap="round">
+            <path d="M190 270 C 190 300, 136 300, 136 342"/>
+            <path d="M136 342 C 136 380, 150 380, 150 416"/>
+            <path d="M150 416 C 200 416, 210 380, 280 380"/>
+          </g>
+
+          <!-- Card: learning pathway -->
+          <g filter="url(#cardShadow)">
+            <rect x="20" y="70" width="400" height="212" rx="18" fill="#fff"/>
+          </g>
+          <text x="44" y="107" font-size="15" font-weight="700" fill="#12233F" data-i18n="art.pathway">Learning pathway</text>
+          <rect x="332" y="90" width="68" height="24" rx="12" fill="#EDF2FE"/>
+          <text x="366" y="106" font-size="11" font-weight="700" fill="#2550D4" text-anchor="middle" data-i18n="art.sample">Sample</text>
+
+          <path d="M70 200 C 100 200, 130 160, 160 160 S 220 205, 250 205 S 310 165, 340 165" fill="none" stroke="#C5CEDF" stroke-width="3" stroke-dasharray="1 8" stroke-linecap="round"/>
+          <path d="M70 200 C 100 200, 130 160, 160 160 S 220 205, 250 205" fill="none" stroke="#55C6B5" stroke-width="4" stroke-linecap="round"/>
+
+          <circle cx="70" cy="200" r="13" fill="#55C6B5"/>
+          <path d="M64.5 200 l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="160" cy="160" r="13" fill="#55C6B5"/>
+          <path d="M154.5 160 l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="250" cy="205" r="14" fill="#fff" stroke="#356AF6" stroke-width="4"/>
+          <circle cx="250" cy="205" r="5" fill="#356AF6"/>
+          <circle cx="340" cy="165" r="12" fill="#fff" stroke="#C5CEDF" stroke-width="3"/>
+
+          <g font-size="12" font-weight="600" fill="#525E73" text-anchor="middle">
+            <text x="70" y="236" data-i18n="art.t1">Forces</text>
+            <text x="160" y="137" data-i18n="art.t2">Energy</text>
+            <text x="250" y="243" fill="#12233F" data-i18n="art.t3">Circuits</text>
+            <text x="340" y="142" data-i18n="art.t4">Coding</text>
+          </g>
+
+          <!-- Topic cards -->
+          <g filter="url(#cardShadow)">
+            <rect x="56" y="318" width="160" height="48" rx="14" fill="#fff"/>
+            <rect x="70" y="392" width="160" height="48" rx="14" fill="#fff"/>
+          </g>
+          <circle cx="80" cy="342" r="10" fill="#EDF2FE"/><circle cx="80" cy="342" r="4" fill="#356AF6"/>
+          <text x="100" y="347" font-size="13" font-weight="600" fill="#12233F" data-i18n="art.c1">Data skills</text>
+          <circle cx="94" cy="416" r="10" fill="#E4F6F3"/><circle cx="94" cy="416" r="4" fill="#55C6B5"/>
+          <text x="114" y="421" font-size="13" font-weight="600" fill="#12233F" data-i18n="art.c2">Problem solving</text>
+
+          <!-- Card: simple chart -->
+          <g filter="url(#cardShadow)">
+            <rect x="248" y="300" width="282" height="156" rx="18" fill="#fff"/>
+          </g>
+          <text x="270" y="332" font-size="14" font-weight="700" fill="#12233F" data-i18n="art.chart">Activity by topic</text>
+          <path d="M268 434 H512" stroke="#E1E6F0" stroke-width="2" stroke-linecap="round"/>
+          <rect x="272" y="388" width="26" height="44" rx="6" fill="#BFD0FC"/>
+          <rect x="314" y="366" width="26" height="66" rx="6" fill="#BFD0FC"/>
+          <rect x="356" y="380" width="26" height="52" rx="6" fill="#BFD0FC"/>
+          <rect x="398" y="348" width="26" height="84" rx="6" fill="#356AF6"/>
+          <rect x="440" y="372" width="26" height="60" rx="6" fill="#BFD0FC"/>
+          <rect x="482" y="358" width="26" height="74" rx="6" fill="#55C6B5"/>
+        </svg>
+        <figcaption>
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7.2v4M8 4.6v.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <span data-i18n="art.caption"></span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ======================= 2. INTRODUCTORY STATEMENT ======================= -->
+  <section class="section statement" aria-labelledby="statement-title">
+    <div class="container statement-grid reveal">
+      <div>
+        <svg class="motif" viewBox="0 0 72 14" aria-hidden="true" focusable="false">
+          <path d="M7 7 H65" stroke="#9FB3E8" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"/>
+          <circle cx="7" cy="7" r="5" fill="#55C6B5"/><circle cx="36" cy="7" r="5" fill="#356AF6"/><circle cx="65" cy="7" r="5" fill="#12233F"/>
+        </svg>
+        <h2 class="statement-text" id="statement-title" data-i18n="statement.title">Making learning technology more useful, more human, and easier to act on.</h2>
+      </div>
+      <p class="statement-sub" data-i18n="statement.text">We bring together educational understanding and technology to support the people who design, deliver, and experience STEM learning.</p>
+    </div>
+  </section>
+
+  <!-- ======================= 3. SOLUTIONS ======================= -->
+  <section class="section solutions" id="solutions" aria-labelledby="solutions-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="solutions-title" data-i18n="sol.title">Technology designed around learning.</h2>
+        <p data-i18n="sol.intro">Explore the areas where we help education providers strengthen their digital learning experience.</p>
+      </div>
+
+      <!-- TODO: the three "Explore" links go to the enquiry form (with the topic pre-selected) until detail pages exist -->
+      <ul class="card-grid" id="products" role="list">
+        <li class="reveal">
+          <article class="card">
+            <span class="icon-tile" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 4v16h16"/><path d="M7.5 15.5l4-5 3.5 3 4.5-6.5"/><circle cx="11.5" cy="10.5" r="1.2" fill="currentColor"/><circle cx="15" cy="13.5" r="1.2" fill="currentColor"/></svg>
+            </span>
+            <h3 data-i18n="sol.1.title">STEM Learning Analytics</h3>
+            <p data-i18n="sol.1.text">Turn learning activity into clearer insights that can inform teaching and programme decisions.</p>
+            <a class="card-link" href="#contact" data-interest="analytics">
+              <span data-i18n="sol.1.link">Explore learning analytics</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </article>
+        </li>
+        <li class="reveal">
+          <article class="card">
+            <span class="icon-tile" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3" y="4" width="18" height="13" rx="2.5"/><path d="M3 8.5h18M8.5 21h7M12 17v4"/><path d="M7 12.5h5"/></svg>
+            </span>
+            <h3 data-i18n="sol.2.title">Learning Platforms</h3>
+            <p data-i18n="sol.2.text">Digital learning environments to help organise, deliver, and support learning experiences.</p>
+            <a class="card-link" href="#contact" data-interest="platforms">
+              <span data-i18n="sol.2.link">Explore learning platforms</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </article>
+        </li>
+        <li class="reveal">
+          <article class="card">
+            <span class="icon-tile" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M10.5 3.5l1.9 4.9 4.9 1.9-4.9 1.9-1.9 4.9-1.9-4.9-4.9-1.9 4.9-1.9z"/><path d="M18 14.5l.9 2.3 2.3.9-2.3.9-.9 2.3-.9-2.3-2.3-.9 2.3-.9z"/></svg>
+            </span>
+            <h3 data-i18n="sol.3.title">AI-Assisted Tools</h3>
+            <p data-i18n="sol.3.text">Thoughtfully designed AI-assisted tools to support learning and educational workflows.</p>
+            <a class="card-link" href="#contact" data-interest="ai">
+              <span data-i18n="sol.3.link">Explore AI-assisted tools</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </article>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= 4. HOW WE WORK ======================= -->
+  <section class="section" id="how" aria-labelledby="how-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="how-title" data-i18n="how.title">From educational challenge to practical solution.</h2>
+      </div>
+      <ol class="steps" role="list">
+        <li class="step reveal">
+          <span class="step-num" aria-hidden="true">1</span>
+          <h3 data-i18n="how.1.title">Understand</h3>
+          <p data-i18n="how.1.text">We begin by learning about your learners, goals, and existing workflows.</p>
+        </li>
+        <li class="step reveal">
+          <span class="step-num" aria-hidden="true">2</span>
+          <h3 data-i18n="how.2.title">Design</h3>
+          <p data-i18n="how.2.text">We shape an approach that fits your educational context and technology needs.</p>
+        </li>
+        <li class="step reveal">
+          <span class="step-num" aria-hidden="true">3</span>
+          <h3 data-i18n="how.3.title">Support</h3>
+          <p data-i18n="how.3.text">We work with you to put the solution into practice and improve it over time.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ======================= 5. WHO WE SUPPORT ======================= -->
+  <section class="section audiences on-dark" id="audiences" aria-labelledby="who-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="who-title" data-i18n="who.title">Built for the people shaping STEM education.</h2>
+      </div>
+      <!-- Audience cards: confirm against the company's actual customer base -->
+      <ul class="audience-grid" role="list">
+        <li class="reveal">
+          <div class="audience">
+            <span class="icon-tile" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M3 21h18M5 21V10.5l7-5.5 7 5.5V21"/><path d="M10 21v-5h4v5M12 9.5v.01"/></svg>
+            </span>
+            <span data-i18n="who.1">Schools and education providers</span>
+          </div>
+        </li>
+        <li class="reveal">
+          <div class="audience">
+            <span class="icon-tile" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17.2" cy="9.2" r="2.4"/><path d="M16.5 14.2c2.6.4 4.5 2.7 4.5 5.8"/></svg>
+            </span>
+            <span data-i18n="who.2">STEM educators and programme teams</span>
+          </div>
+        </li>
+        <li class="reveal">
+          <div class="audience">
+            <span class="icon-tile" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3.5l9 4.8-9 4.8-9-4.8z"/><path d="M3 12.6l9 4.8 9-4.8"/><path d="M3 16.4l9 4.8 9-4.8"/></svg>
+            </span>
+            <span data-i18n="who.3">Organisations developing learning experiences</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= 6. ABOUT ======================= -->
+  <section class="section about" id="about" aria-labelledby="about-title">
+    <div class="container about-grid">
+      <div class="about-copy reveal">
+        <svg class="motif" viewBox="0 0 72 14" aria-hidden="true" focusable="false">
+          <path d="M7 7 H65" stroke="#9FB3E8" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"/>
+          <circle cx="7" cy="7" r="5" fill="#55C6B5"/><circle cx="36" cy="7" r="5" fill="#356AF6"/><circle cx="65" cy="7" r="5" fill="#12233F"/>
+        </svg>
+        <h2 id="about-title" data-i18n="about.title">Education insight. Technology in practice.</h2>
+        <p data-i18n="about.text">DIY Academy Technology Limited is an education technology company based in Hong Kong. We focus on STEM learning analytics, learning platforms, and AI-assisted tools that support more effective digital learning experiences.</p>
+        <!-- TODO: point to the About page when it exists -->
+        <a class="btn btn-secondary" href="#how" data-i18n="about.btn">More About Us</a>
+      </div>
+
+      <div class="about-art reveal" aria-hidden="true">
+        <!-- Decorative brand illustration: replace with an office/team photo when available -->
+        <svg viewBox="0 0 520 420" focusable="false">
+          <defs>
+            <pattern id="dotsB" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1.4" fill="#12233F" fill-opacity=".1"/>
+            </pattern>
+            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="160%">
+              <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#12233F" flood-opacity=".14"/>
+            </filter>
+          </defs>
+          <rect width="520" height="420" rx="32" fill="#EDF2FE"/>
+          <rect width="520" height="420" rx="32" fill="url(#dotsB)"/>
+          <circle cx="430" cy="110" r="92" fill="none" stroke="#356AF6" stroke-opacity=".18" stroke-width="2"/>
+          <circle cx="430" cy="110" r="56" fill="none" stroke="#356AF6" stroke-opacity=".28" stroke-width="2"/>
+
+          <path d="M66 362 C 150 362, 150 272, 240 252 S 336 150, 430 110" fill="none" stroke="#356AF6" stroke-width="4" stroke-linecap="round"/>
+          <path d="M66 362 C 190 372, 300 340, 470 300" fill="none" stroke="#55C6B5" stroke-width="2.5" stroke-dasharray="2 9" stroke-linecap="round"/>
+
+          <g filter="url(#softShadow)">
+            <rect x="44" y="52" width="204" height="124" rx="18" fill="#fff"/>
+            <rect x="286" y="232" width="192" height="132" rx="18" fill="#fff"/>
+          </g>
+          <circle cx="96" cy="114" r="27" fill="none" stroke="#EDF2FE" stroke-width="9"/>
+          <path d="M96 87 A27 27 0 1 1 70.3 122.3" fill="none" stroke="#55C6B5" stroke-width="9" stroke-linecap="round"/>
+          <rect x="142" y="92" width="58" height="9" rx="4.5" fill="#12233F"/>
+          <rect x="142" y="110" width="84" height="9" rx="4.5" fill="#D9E1F2"/>
+          <rect x="142" y="128" width="66" height="9" rx="4.5" fill="#D9E1F2"/>
+
+          <g stroke="#C5CEDF" stroke-width="2">
+            <path d="M324 322 L364 276 L410 310 L446 266"/>
+            <path d="M364 276 L410 310"/>
+          </g>
+          <circle cx="324" cy="322" r="9" fill="#12233F"/>
+          <circle cx="364" cy="276" r="11" fill="#356AF6"/>
+          <circle cx="410" cy="310" r="9" fill="#55C6B5"/>
+          <circle cx="446" cy="266" r="7" fill="#fff" stroke="#356AF6" stroke-width="3"/>
+
+          <circle cx="66" cy="362" r="12" fill="#12233F"/>
+          <circle cx="240" cy="252" r="13" fill="#fff" stroke="#356AF6" stroke-width="5"/>
+          <circle cx="430" cy="110" r="16" fill="#55C6B5"/>
+          <circle cx="430" cy="110" r="6" fill="#fff"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 7. TRUST AND PROOF ======================= -->
+  <section class="section" id="proof" aria-labelledby="proof-title">
+    <div class="container">
+      <!--
+        VERIFIED INFORMATION ONLY.
+        Add here when available and approved: customer/partner logos, a real case study,
+        product screenshots, a verified testimonial, certifications or privacy commitments.
+      -->
+      <div class="proof-panel reveal">
+        <span class="icon-tile" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 21s-6.5-5.6-6.5-10.6a6.5 6.5 0 0 1 13 0C18.500 15.400 12 21 12 21z"/><circle cx="12" cy="10.300" r="2.400"/></svg>
+        </span>
+        <div>
+          <h2 id="proof-title" data-i18n="proof.title">A Hong Kong education technology company focused on STEM learning.</h2>
+          <ul class="chips" role="list">
+            <li data-i18n="proof.c1">Based in Wan Chai, Hong Kong</li>
+            <li data-i18n="proof.c2">STEM learning analytics</li>
+            <li data-i18n="proof.c3">Learning platforms</li>
+            <li data-i18n="proof.c4">AI-assisted tools</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 8. CONTACT CALL TO ACTION ======================= -->
+  <section class="section cta on-dark" aria-labelledby="cta-title">
+    <svg class="cta-bg" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#fff" stroke-linecap="round">
+        <path d="M640 420 C 760 300, 820 330, 900 230 S 1060 120, 1220 60" stroke-opacity=".28" stroke-width="2.500"/>
+        <path d="M700 440 C 840 380, 960 360, 1040 280 S 1150 220, 1230 200" stroke-opacity=".2" stroke-width="2" stroke-dasharray="2 10"/>
+      </g>
+      <circle cx="900" cy="230" r="9" fill="#fff" fill-opacity=".9"/>
+      <circle cx="1040" cy="280" r="7" fill="#55C6B5"/>
+      <circle cx="1098" cy="118" r="11" fill="#12233F" fill-opacity=".55"/>
+      <circle cx="1098" cy="118" r="4" fill="#fff"/>
+      <circle cx="760" cy="326" r="5" fill="#fff" fill-opacity=".6"/>
+    </svg>
+    <div class="container">
+      <div class="cta-inner reveal">
+        <h2 id="cta-title" data-i18n="cta.title">Let’s make learning work better.</h2>
+        <p data-i18n="cta.text">Tell us about your organisation, your learners, or the challenge you’re working on.</p>
+        <div class="btn-row">
+          <a class="btn btn-light" href="#contact" data-i18n="cta.book">Book a Consultation</a>
+          <a class="btn btn-outline-light" href="mailto:info@diyacademytech.com" data-i18n="cta.email">Email Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 9. CONTACT FORM ======================= -->
+  <section class="section" id="contact" aria-labelledby="contact-title">
+    <div class="container contact-grid">
+      <div class="contact-info reveal">
+        <h2 id="contact-title" data-i18n="contact.title">Get in touch</h2>
+        <p data-i18n="contact.text">Send us an enquiry using the form, or reach us directly using the details below.</p>
+        <ul class="contact-list" role="list">
+          <li>
+            <span class="icon-tile" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2.500"/><path d="M3.500 7.500l8.500 6 8.500-6"/></svg>
+            </span>
+            <div>
+              <span class="label" data-i18n="contact.email.label">Email</span>
+              <a href="mailto:info@diyacademytech.com">info@diyacademytech.com</a>
+            </div>
+          </li>
+          <li>
+            <span class="icon-tile" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 21s-6.500-5.600-6.500-10.600a6.500 6.500 0 0 1 13 0C18.500 15.400 12 21 12 21z"/><circle cx="12" cy="10.300" r="2.400"/></svg>
+            </span>
+            <div>
+              <span class="label" data-i18n="contact.address.label">Address</span>
+              <span data-i18n="contact.address">8/F, Simsons Commercial Building, 137–139 Johnston Road, Wan Chai, Hong Kong</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="form-card reveal">
+        <div class="form-status" id="form-status" role="status" tabindex="-1" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.500"/><path id="form-status-icon" d="M7.500 12.300l3 3 6-6.500"/></svg>
+          <div>
+            <strong id="form-status-title"></strong>
+            <p id="form-status-text"></p>
+          </div>
+        </div>
+
+        <form id="enquiry-form" novalidate>
+          <p class="form-note"><span data-i18n="form.required">Fields marked with * are required.</span></p>
+          <div class="form-grid">
+            <div class="field">
+              <label for="f-name"><span data-i18n="form.name">Name</span> <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="f-name" name="name" autocomplete="name" required aria-describedby="err-name">
+              <p class="field-error" id="err-name" hidden>
+                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M8 4.200v4.600M8 11.300v.4" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/></svg>
+                <span></span>
+              </p>
+            </div>
+            <div class="field">
+              <label for="f-org"><span data-i18n="form.org">Organisation</span> <span class="opt" data-i18n="form.optional">(optional)</span></label>
+              <input type="text" id="f-org" name="organisation" autocomplete="organization">
+            </div>
+            <div class="field">
+              <label for="f-email"><span data-i18n="form.email">Work email</span> <span class="req" aria-hidden="true">*</span></label>
+              <input type="email" id="f-email" name="email" autocomplete="email" inputmode="email" required aria-describedby="err-email">
+              <p class="field-error" id="err-email" hidden>
+                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M8 4.200v4.600M8 11.300v.4" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/></svg>
+                <span></span>
+              </p>
+            </div>
+            <div class="field">
+              <label for="f-interest"><span data-i18n="form.interest">What are you interested in?</span> <span class="req" aria-hidden="true">*</span></label>
+              <select id="f-interest" name="interest" required aria-describedby="err-interest">
+                <option value="" data-i18n="form.select">Please select</option>
+                <option value="analytics" data-i18n="opt.analytics">Learning analytics</option>
+                <option value="platforms" data-i18n="opt.platforms">Learning platforms</option>
+                <option value="ai" data-i18n="opt.ai">AI-assisted tools</option>
+                <option value="other" data-i18n="opt.other">Other</option>
+              </select>
+              <p class="field-error" id="err-interest" hidden>
+                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M8 4.200v4.600M8 11.300v.4" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/></svg>
+                <span></span>
+              </p>
+            </div>
+            <div class="field full">
+              <label for="f-message"><span data-i18n="form.message">Message</span> <span class="req" aria-hidden="true">*</span></label>
+              <textarea id="f-message" name="message" rows="5" required aria-describedby="err-message"></textarea>
+              <p class="field-error" id="err-message" hidden>
+                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M8 4.200v4.600M8 11.300v.4" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/></svg>
+                <span></span>
+              </p>
+            </div>
+
+            <!-- Privacy wording is a placeholder: confirm against the company's actual privacy policy -->
+            <p class="privacy-note field full" id="privacy-notice" data-i18n="form.privacy">Privacy notice: we will use the details you provide only to respond to your enquiry.</p>
+
+            <div class="field full">
+              <div class="consent">
+                <input type="checkbox" id="f-consent" name="consent" required aria-describedby="err-consent">
+                <label for="f-consent"><span data-i18n="form.consent">I agree to DIY Academy Technology Limited using my information to respond to this enquiry.</span> <span class="req" aria-hidden="true">*</span></label>
+              </div>
+              <p class="field-error" id="err-consent" hidden>
+                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="7" fill="currentColor"/><path d="M8 4.200v4.600M8 11.300v.4" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/></svg>
+                <span></span>
+              </p>
+            </div>
+
+            <div class="field full form-actions">
+              <button class="btn btn-primary" type="submit" id="f-submit"><span data-i18n="form.submit">Send Enquiry</span></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ======================= 10. FOOTER ======================= -->
+<footer class="site-footer on-dark">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <svg width="40" height="40" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+          <rect width="36" height="36" rx="10" fill="#fff" fill-opacity=".1"/>
+          <path d="M9.500 25.500 L18 17 L26.500 10.500" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="9.500" cy="25.500" r="3.600" fill="#55C6B5"/>
+          <circle cx="18" cy="17" r="3.600" fill="#fff"/>
+          <circle cx="26.500" cy="10.500" r="3.600" fill="#7FA2FF"/>
+        </svg>
+        <div>
+          <p class="name-en" lang="en">DIY Academy Technology Limited</p>
+          <p class="name-zh" lang="zh-Hant">思創教育科技有限公司</p>
+        </div>
+      </div>
+
+      <div>
+        <h2 data-i18n="footer.contact">Contact</h2>
+        <address>
+          <p><span data-i18n="contact.email.label">Email</span>: <a href="mailto:info@diyacademytech.com">info@diyacademytech.com</a></p>
+          <p><span data-i18n="contact.address.label">Address</span>: <span data-i18n="contact.address">8/F, Simsons Commercial Building, 137–139 Johnston Road, Wan Chai, Hong Kong</span></p>
+        </address>
+      </div>
+
+      <nav aria-label="Footer" data-i18n-attr="aria-label:footer.nav">
+        <h2 data-i18n="footer.links">Explore</h2>
+        <ul class="footer-links" role="list">
+          <li><a href="#solutions" data-i18n="nav.solutions">Solutions</a></li>
+          <li><a href="#about" data-i18n="nav.about">About</a></li>
+          <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+          <!-- TODO: point to the Privacy Policy page when it exists -->
+          <li><a href="#privacy-notice" data-i18n="footer.privacy">Privacy</a></li>
+        </ul>
+      </nav>
+    </div>
+    <p class="footer-bottom">© <span id="year">2026</span> DIY Academy Technology Limited. <span data-i18n="footer.rights">All rights reserved.</span></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ------------------------------------------------------------------
+     CONFIG
+     Set FORM_ENDPOINT to your form handler URL (it will receive a JSON POST).
+     While it is empty, the form opens the visitor's email app with the
+     enquiry pre-filled, so no enquiry is silently lost.
+  ------------------------------------------------------------------ */
+  var FORM_ENDPOINT = '';
+  var CONTACT_EMAIL = 'info@diyacademytech.com';
+  var STORAGE_KEY = 'diyat-lang';
+
+  var I18N = {
+    en: {
+      'meta.title': 'DIY Academy Technology Limited — Smarter tools for better STEM learning',
+      'meta.desc': 'DIY Academy Technology Limited is a Hong Kong education technology company focused on STEM learning analytics, learning platforms, and AI-assisted tools.',
+      'skip': 'Skip to main content',
+      'brand.home': 'DIY Academy Technology — home',
+      'menu.label': 'Menu',
+      'nav.label': 'Main navigation',
+      'nav.solutions': 'Solutions',
+      'nav.products': 'Products',
+      'nav.about': 'About',
+      'nav.insights': 'Insights',
+      'nav.contact': 'Contact',
+      'lang.label': 'Select website language',
+      'cta.book': 'Book a Consultation',
+
+      'hero.eyebrow': 'EDUCATION TECHNOLOGY · STEM LEARNING',
+      'hero.title': 'Smarter tools for better STEM learning.',
+      'hero.text': 'We develop STEM learning analytics, learning platforms, and AI-assisted tools to help education providers create more informed and engaging learning experiences.',
+      'hero.explore': 'Explore Our Solutions',
+      'art.alt': 'Illustration of a learning dashboard with a learning pathway, a simple bar chart and connected topic cards. Sample data for illustration only.',
+      'art.caption': '',
+      'art.pathway': 'Learning pathway',
+      'art.sample': 'Sample',
+      'art.t1': 'Forces',
+      'art.t2': 'Energy',
+      'art.t3': 'Circuits',
+      'art.t4': 'Coding',
+      'art.c1': 'Data skills',
+      'art.c2': 'Problem solving',
+      'art.chart': 'Activity by topic',
+
+      'statement.title': 'Making learning technology more useful, more human, and easier to act on.',
+      'statement.text': 'We bring together educational understanding and technology to support the people who design, deliver, and experience STEM learning.',
+
+      'sol.title': 'Technology designed around learning.',
+      'sol.intro': 'Explore the areas where we help education providers strengthen their digital learning experience.',
+      'sol.1.title': 'STEM Learning Analytics',
+      'sol.1.text': 'Turn learning activity into clearer insights that can inform teaching and programme decisions.',
+      'sol.1.link': 'Explore learning analytics',
+      'sol.2.title': 'Learning Platforms',
+      'sol.2.text': 'Digital learning environments to help organise, deliver, and support learning experiences.',
+      'sol.2.link': 'Explore learning platforms',
+      'sol.3.title': 'AI-Assisted Tools',
+      'sol.3.text': 'Thoughtfully designed AI-assisted tools to support learning and educational workflows.',
+      'sol.3.link': 'Explore AI-assisted tools',
+
+      'how.title': 'From educational challenge to practical solution.',
+      'how.1.title': 'Understand',
+      'how.1.text': 'We begin by learning about your learners, goals, and existing workflows.',
+      'how.2.title': 'Design',
+      'how.2.text': 'We shape an approach that fits your educational context and technology needs.',
+      'how.3.title': 'Support',
+      'how.3.text': 'We work with you to put the solution into practice and improve it over time.',
+
+      'who.title': 'Built for the people shaping STEM education.',
+      'who.1': 'Schools and education providers',
+      'who.2': 'STEM educators and programme teams',
+      'who.3': 'Organisations developing learning experiences',
+
+      'about.title': 'Education insight. Technology in practice.',
+      'about.text': 'DIY Academy Technology Limited is an education technology company based in Hong Kong. We focus on STEM learning analytics, learning platforms, and AI-assisted tools that support more effective digital learning experiences.',
+      'about.btn': 'More About Us',
+
+      'proof.title': 'A Hong Kong education technology company focused on STEM learning.',
+      'proof.c1': 'STEM learning analytics',
+      'proof.c2': 'Learning platforms',
+      'proof.c3': 'AI-assisted tools',
+
+      'cta.title': 'Let’s make learning work better.',
+      'cta.text': 'Tell us about your organisation, your learners, or the challenge you’re working on.',
+      'cta.email': 'Email Us',
+
+      'contact.title': 'Get in touch',
+      'contact.text': 'Send us an enquiry using the form, or reach us directly using the details below.',
+      'contact.email.label': 'Email',
+      'contact.address.label': 'Address',
+      'contact.address': '8/F, Simsons Commercial Building, 137–139 Johnston Road, Wan Chai, Hong Kong',
+
+      'form.required': 'Fields marked with * are required.',
+      'form.name': 'Name',
+      'form.org': 'Organisation',
+      'form.optional': '(optional)',
+      'form.email': 'Work email',
+      'form.interest': 'What are you interested in?',
+      'form.select': 'Please select',
+      'opt.analytics': 'Learning analytics',
+      'opt.platforms': 'Learning platforms',
+      'opt.ai': 'AI-assisted tools',
+      'opt.other': 'Other',
+      'form.message': 'Message',
+      'form.privacy': 'Privacy notice: we will use the details you provide only to respond to your enquiry.',
+      'form.consent': 'I agree to DIY Academy Technology Limited using my information to respond to this enquiry.',
+      'form.submit': 'Send Enquiry',
+      'form.sending': 'Sending…',
+
+      'err.name': 'Please enter your name.',
+      'err.email': 'Please enter a valid work email address.',
+      'err.interest': 'Please choose an option.',
+      'err.message': 'Please tell us a little about your enquiry.',
+      'err.consent': 'Please tick the box to confirm your consent.',
+
+      'status.sent.title': 'Thank you — your enquiry has been sent.',
+      'status.sent.text': 'We will reply to the email address you provided.',
+      'status.mail.title': 'One more step: send the email to complete your enquiry.',
+      'status.mail.text': 'Your email app should have opened with your enquiry filled in. If it did not, please email us at info@diyacademytech.com.',
+      'status.fail.title': 'Sorry, your enquiry was not sent.',
+      'status.fail.text': 'Something went wrong. Please try again, or email us at info@diyacademytech.com.',
+      'mail.subject': 'Website enquiry',
+
+      'footer.contact': 'Contact',
+      'footer.links': 'Explore',
+      'footer.nav': 'Footer',
+      'footer.privacy': 'Privacy',
+      'footer.rights': 'All rights reserved.'
+    },
+
+    zh: {
+      'meta.title': '思創教育科技有限公司 — 以更智慧的工具，啟發更好的 STEM 學習',
+      'meta.desc': 'DIY Academy Technology Limited（思創教育科技有限公司）是一家位於香港的教育科技公司，專注於 STEM 學習數據分析、學習平台及 AI 輔助工具。',
+      'skip': '跳至主要內容',
+      'brand.home': 'DIY Academy Technology — 主頁',
+      'menu.label': '選單',
+      'nav.label': '主要導覽',
+      'nav.solutions': '解決方案',
+      'nav.products': '產品',
+      'nav.about': '關於我們',
+      'nav.insights': '專欄',
+      'nav.contact': '聯絡我們',
+      'lang.label': '選擇網站語言',
+      'cta.book': '預約諮詢',
+
+      'hero.eyebrow': '教育科技 · STEM 學習',
+      'hero.title': '以更智慧的工具，啟發更好的 STEM 學習。',
+      'hero.text': '我們專注於 STEM 學習數據分析、學習平台及 AI 輔助工具，協助教育機構打造更具啟發性、以數據為本的學習體驗。',
+      'hero.explore': '探索解決方案',
+      'art.alt': '學習儀表板示意圖，包含學習路徑、簡單棒形圖及互相連結的主題卡。數據僅供示意。',
+      'art.caption': '',
+      'art.pathway': '學習路徑',
+      'art.sample': '範例',
+      'art.t1': '力學',
+      'art.t2': '能量',
+      'art.t3': '電路',
+      'art.t4': '編程',
+      'art.c1': '數據技能',
+      'art.c2': '解難能力',
+      'art.chart': '各主題學習活動',
+
+      'statement.title': '讓學習科技更實用、更貼近人心，也更能轉化為行動。',
+      'statement.text': '我們結合教育理念與科技，支援設計、推行及參與 STEM 學習的每一位。',
+
+      'sol.title': '以學習需求為核心的科技方案。',
+      'sol.intro': '探索我們如何協助教育機構提升數碼學習體驗。',
+      'sol.1.title': 'STEM 學習數據分析',
+      'sol.1.text': '將學習活動轉化為清晰的數據洞察，支援教學及課程規劃決策。',
+      'sol.1.link': '了解學習數據分析',
+      'sol.2.title': '學習平台',
+      'sol.2.text': '透過數碼學習環境，協助整理、推行及支援學習體驗。',
+      'sol.2.link': '了解學習平台',
+      'sol.3.title': 'AI 輔助工具',
+      'sol.3.text': '以審慎、實用的方式設計 AI 輔助工具，支援學習與教育工作流程。',
+      'sol.3.link': '了解 AI 輔助工具',
+
+      'how.title': '由教育挑戰出發，實踐可行方案。',
+      'how.1.title': '了解',
+      'how.1.text': '先了解您的學習者、目標及現有工作流程。',
+      'how.2.title': '設計',
+      'how.2.text': '根據您的教育場景及科技需要，設計合適的方案。',
+      'how.3.title': '支援',
+      'how.3.text': '與您合作推行方案，並按需要持續改進。',
+
+      'who.title': '為推動 STEM 教育的人而設。',
+      'who.1': '學校及教育機構',
+      'who.2': 'STEM 教育工作者及課程團隊',
+      'who.3': '設計學習體驗的機構',
+
+      'about.title': '以教育洞察，實踐科技方案。',
+      'about.text': 'DIY Academy Technology Limited（思創教育科技有限公司）是一家位於香港的教育科技公司，專注於 STEM 學習數據分析、學習平台及 AI 輔助工具，致力支援更有效的數碼學習體驗。',
+      'about.btn': '了解我們',
+
+      'proof.title': '專注 STEM 學習的香港教育科技公司。',
+      'proof.c1': 'STEM 學習數據分析',
+      'proof.c2': '學習平台',
+      'proof.c3': 'AI 輔助工具',
+
+      'cta.title': '一起讓學習體驗更進一步。',
+      'cta.text': '歡迎與我們分享您的機構、學習者，或目前希望解決的挑戰。',
+      'cta.email': '電郵聯絡',
+
+      'contact.title': '聯絡我們',
+      'contact.text': '歡迎填寫表格提交查詢，或透過以下方式直接聯絡我們。',
+      'contact.email.label': '電郵',
+      'contact.address.label': '地址',
+      'contact.address': '香港灣仔莊士敦道 137–139 號新盛商業大廈 8 樓',
+
+      'form.required': '標有 * 的欄位必須填寫。',
+      'form.name': '姓名',
+      'form.org': '機構',
+      'form.optional': '（選填）',
+      'form.email': '工作電郵',
+      'form.interest': '您感興趣的服務',
+      'form.select': '請選擇',
+      'opt.analytics': '學習數據分析',
+      'opt.platforms': '學習平台',
+      'opt.ai': 'AI 輔助工具',
+      'opt.other': '其他',
+      'form.message': '留言',
+      'form.privacy': '私隱聲明：我們只會使用您提供的資料回覆是次查詢。',
+      'form.consent': '我同意 DIY Academy Technology Limited 使用我的資料以回覆是次查詢。',
+      'form.submit': '提交查詢',
+      'form.sending': '正在提交…',
+
+      'err.name': '請輸入您的姓名。',
+      'err.email': '請輸入有效的工作電郵地址。',
+      'err.interest': '請選擇一個選項。',
+      'err.message': '請簡單說明您的查詢內容。',
+      'err.consent': '請剔選方格以確認同意。',
+
+      'status.sent.title': '謝謝！您的查詢已送出。',
+      'status.sent.text': '我們會透過您提供的電郵地址回覆。',
+      'status.mail.title': '還差一步：請寄出電郵以完成查詢。',
+      'status.mail.text': '您的電郵程式應已開啟並填妥查詢內容。如未能開啟，請直接電郵至 info@diyacademytech.com。',
+      'status.fail.title': '抱歉，您的查詢未能送出。',
+      'status.fail.text': '系統出現問題。請再試一次，或直接電郵至 info@diyacademytech.com。',
+      'mail.subject': '網站查詢',
+
+      'footer.contact': '聯絡方式',
+      'footer.links': '網站導覽',
+      'footer.nav': '頁尾導覽',
+      'footer.privacy': '私隱政策',
+      'footer.rights': '版權所有。'
+    }
+  };
+
+  var currentLang = 'en';
+  function t(key) { return (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || ''; }
+
+  /* ---------- Language ---------- */
+  function initialLang() {
+    try {
+      var q = new URLSearchParams(window.location.search).get('lang');
+      if (q === 'zh' || q === 'en') return q;
+      var s = window.localStorage.getItem(STORAGE_KEY);
+      if (s === 'zh' || s === 'en') return s;
+    } catch (e) {}
+    return (navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+  }
+
+  function applyLang(lang, remember) {
+    currentLang = lang === 'zh' ? 'zh' : 'en';
+    document.documentElement.lang = currentLang === 'zh' ? 'zh-Hant' : 'en';
+
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var v = t(el.getAttribute('data-i18n'));
+      if (v) el.textContent = v;
+    });
+    document.querySelectorAll('[data-i18n-attr]').forEach(function (el) {
+      el.getAttribute('data-i18n-attr').split(';').forEach(function (pair) {
+        var parts = pair.split(':');
+        if (parts.length === 2) el.setAttribute(parts[0].trim(), t(parts[1].trim()));
+      });
+    });
+
+    document.title = t('meta.title');
+    var meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', t('meta.desc'));
+
+    document.querySelectorAll('.lang-switch button').forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(btn.getAttribute('data-lang') === currentLang));
+    });
+
+    if (remember) {
+      try { window.localStorage.setItem(STORAGE_KEY, currentLang); } catch (e) {}
+    }
+  }
+
+  document.querySelectorAll('.lang-switch button').forEach(function (btn) {
+    btn.addEventListener('click', function () { applyLang(btn.getAttribute('data-lang'), true); });
+  });
+  applyLang(initialLang(), false);
+
+  /* ---------- Header: scroll state + mobile menu ---------- */
+  var header = document.getElementById('site-header');
+  var toggle = document.getElementById('menu-toggle');
+  var menu = document.getElementById('site-menu');
+
+  function onScroll() { header.classList.toggle('is-scrolled', window.scrollY > 8); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  function setMenu(open) {
+    menu.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+  toggle.addEventListener('click', function () { setMenu(toggle.getAttribute('aria-expanded') !== 'true'); });
+  menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { setMenu(false); toggle.focus(); }
+  });
+  document.addEventListener('click', function (e) {
+    if (toggle.getAttribute('aria-expanded') === 'true' && !header.contains(e.target)) setMenu(false);
+  });
+  window.addEventListener('resize', function () { if (window.innerWidth > 1120) setMenu(false); });
+
+  /* ---------- Solution links pre-select the interest in the form ---------- */
+  var interest = document.getElementById('f-interest');
+  document.querySelectorAll('[data-interest]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      interest.value = link.getAttribute('data-interest');
+      clearError(interest);
+    });
+  });
+
+  /* ---------- Contact form ---------- */
+  var form = document.getElementById('enquiry-form');
+  var statusBox = document.getElementById('form-status');
+  var statusTitle = document.getElementById('form-status-title');
+  var statusText = document.getElementById('form-status-text');
+  var statusIcon = document.getElementById('form-status-icon');
+  var submitBtn = document.getElementById('f-submit');
+  var submitLabel = submitBtn.querySelector('span');
+
+  var f = {
+    name: document.getElementById('f-name'),
+    org: document.getElementById('f-org'),
+    email: document.getElementById('f-email'),
+    interest: interest,
+    message: document.getElementById('f-message'),
+    consent: document.getElementById('f-consent')
+  };
+
+  var rules = [
+    { el: f.name, key: 'err.name', ok: function () { return f.name.value.trim().length > 0; } },
+    { el: f.email, key: 'err.email', ok: function () { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.value.trim()); } },
+    { el: f.interest, key: 'err.interest', ok: function () { return f.interest.value !== ''; } },
+    { el: f.message, key: 'err.message', ok: function () { return f.message.value.trim().length > 0; } },
+    { el: f.consent, key: 'err.consent', ok: function () { return f.consent.checked; } }
+  ];
+
+  function errorBox(el) { return document.getElementById(el.getAttribute('aria-describedby')); }
+  function showError(el, key) {
+    var box = errorBox(el), span = box.querySelector('span');
+    span.setAttribute('data-i18n', key);
+    span.textContent = t(key);
+    box.hidden = false;
+    el.setAttribute('aria-invalid', 'true');
+  }
+  function clearError(el) {
+    var box = errorBox(el);
+    if (!box) return;
+    var span = box.querySelector('span');
+    span.removeAttribute('data-i18n');
+    span.textContent = '';
+    box.hidden = true;
+    el.removeAttribute('aria-invalid');
+  }
+  rules.forEach(function (rule) {
+    ['input', 'change'].forEach(function (evt) {
+      rule.el.addEventListener(evt, function () {
+        if (rule.el.getAttribute('aria-invalid') === 'true' && rule.ok()) clearError(rule.el);
+      });
+    });
+  });
+
+  function setStatus(type) {
+    statusBox.className = 'form-status' + (type === 'fail' ? ' is-error' : '');
+    statusIcon.setAttribute('d', type === 'fail' ? 'M12 7v6M12 16.500v.4' : 'M7.500 12.300l3 3 6-6.500');
+    statusTitle.setAttribute('data-i18n', 'status.' + type + '.title');
+    statusText.setAttribute('data-i18n', 'status.' + type + '.text');
+    statusTitle.textContent = t('status.' + type + '.title');
+    statusText.textContent = t('status.' + type + '.text');
+    statusBox.hidden = false;
+    statusBox.focus();
+  }
+
+  function setSending(on) {
+    submitBtn.disabled = on;
+    var key = on ? 'form.sending' : 'form.submit';
+    submitLabel.setAttribute('data-i18n', key);
+    submitLabel.textContent = t(key);
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    statusBox.hidden = true;
+
+    var firstInvalid = null;
+    rules.forEach(function (rule) {
+      if (rule.ok()) { clearError(rule.el); }
+      else { showError(rule.el, rule.key); if (!firstInvalid) firstInvalid = rule.el; }
+    });
+    if (firstInvalid) { firstInvalid.focus(); return; }
+
+    var interestLabel = f.interest.options[f.interest.selectedIndex].textContent;
+    var data = {
+      name: f.name.value.trim(),
+      organisation: f.org.value.trim(),
+      email: f.email.value.trim(),
+      interest: f.interest.value,
+      interestLabel: interestLabel,
+      message: f.message.value.trim(),
+      consent: true,
+      language: currentLang
+    };
+
+    if (FORM_ENDPOINT) {
+      setSending(true);
+      fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(function (res) {
+        if (!res.ok) throw new Error('Request failed');
+        form.reset();
+        form.hidden = true;
+        setStatus('sent');
+      }).catch(function () {
+        setStatus('fail');
+      }).then(function () { setSending(false); });
+    } else {
+      /* No endpoint configured: hand the enquiry to the visitor's email app. */
+      var subject = t('mail.subject') + ' — ' + interestLabel;
+      var body = [
+        t('form.name') + ': ' + data.name,
+        t('form.org') + ': ' + (data.organisation || '—'),
+        t('form.email') + ': ' + data.email,
+        t('form.interest') + ': ' + interestLabel,
+        '',
+        data.message
+      ].join('\n');
+      window.location.href = 'mailto:' + CONTACT_EMAIL +
+        '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      setStatus('mail');
+    }
+  });
+
+  /* ---------- Footer year ---------- */
+  var year = document.getElementById('year');
+  if (year) year.textContent = String(new Date().getFullYear());
+
+  /* ---------- Scroll reveal ---------- */
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { entry.target.classList.add('is-visible'); io.unobserve(entry.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    reveals.forEach(function (el) { io.observe(el); });
+  } else {
+    reveals.forEach(function (el) { el.classList.add('is-visible'); });
+  }
+})();
+</script>
+</body>
+</html>
